@@ -15,22 +15,25 @@ try:
     foundSubdo = True
   if foundSubdo:
     for site in getSubdo:
-      response = req.get(f"http://{site}", headers={
-        "X-Forwarded-Host": "evil.com"
-      }, allow_redirects=False, timeout=3)
       try:
-        loc = response.headers["Location"]
-        vulnerable = False
-        if "evil.com" in loc and response.status_code == 302:
-          vulnerable = True
-        if vulnerable:
-            print(f"{site} Vulnerable")
-            with open("saved.txt", "a") as file:
-              file.write(f"{site}\n")
-        if not vulnerable:
-            print(f"{site} Not Vulnerable")
-      except (KeyError, requests.exceptions.ConnectionError):
-        print(f"{site} Not Found")
+        response = req.get(f"http://{site}", headers={
+          "X-Forwarded-Host": "evil.com"
+        }, allow_redirects=False, timeout=3)
+        try:
+          loc = response.headers["Location"]
+          vulnerable = False
+          if "evil.com" in loc and response.status_code == 302:
+            vulnerable = True
+          if vulnerable:
+              print(f"{site} Vulnerable")
+              with open("saved.txt", "a") as file:
+                file.write(f"{site}\n")
+          if not vulnerable:
+              print(f"{site} Not Vulnerable")
+        except KeyError:
+          print(f"{site} Not Found")
+      except:
+        print(f"{site} ERROR")
 except IndexError:
   print("usage ./main.py domain")
 except:
