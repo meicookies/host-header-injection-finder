@@ -17,7 +17,7 @@ try:
     for site in getSubdo:
       response = req.get(f"http://{site}", headers={
         "X-Forwarded-Host": "evil.com"
-      }, allow_redirects=False)
+      }, allow_redirects=False, timeout=3)
       try:
         loc = response.headers["Location"]
         vulnerable = False
@@ -33,3 +33,5 @@ try:
         print(f"{site} Not Found")
 except IndexError:
   print("usage ./main.py domain")
+except:
+  print(f"{site} ERROR")
